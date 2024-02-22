@@ -1,21 +1,28 @@
 const router = require('express').Router();
-const { variousFunctions } = require('../../controllers/usersController'); // create controllers directory and functions for routes
-// fill out routes with controller functions
+const { 
+    getUsers,
+    createUser,
+    getSingleUser,
+    updateUser,
+    deleteUser,
+    addFriend,
+    removeFriend
+ } = require('../../controllers/usersController');
 
 // /api/users
 router.route('/')
-.get()
-.post()
+.get(getUsers)
+.post(createUser)
 
 // /api/users/:userId
 router.route('/:userId')
-.get()
-.put()
-.delete()
+.get(getSingleUser)
+.put(updateUser)
+.delete(deleteUser)
 
 // /api/users/:userId/friends/:friendId
 router.route('/:userId/friends/:friendId')
-.post()
-.delete()
+.post(addFriend)
+.delete(removeFriend)
 
 module.exports = router;
