@@ -21,11 +21,11 @@ const thoughtSchema = new Schema(
             required: true
         },
         reactions: [reactionSchema],
-        toJSON: {
-            virtuals: true,
-            getters: true
-        },
-        id: false,
+        // toJSON: {
+        //     virtuals: true,
+        //     getters: true
+        // },
+        // id: false,
     }
 );
 

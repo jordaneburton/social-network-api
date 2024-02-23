@@ -22,10 +22,10 @@ const reactionSchema = new Schema(
             default: Date.now,
             get: formatDate // use a getter method to format timestamp
         },
-        toJSON: {
-            getters: true
-        },
-        id: false,
+        // toJSON: {
+        //     getters: true
+        // },
+        // id: false,
     }
 );
 

@@ -27,10 +27,10 @@ const userSchema = new Schema(
               ref: 'user',
             },
         ],
-        toJSON: {
-            virtuals: true,
-        },
-        id: false,
+        // toJSON: {
+        //     virtuals: true,
+        // },
+        // id: false,
     }
 );
     
