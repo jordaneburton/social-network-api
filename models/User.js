@@ -5,14 +5,14 @@ const userSchema = new Schema(
     {
         username: {
             type: String,
-            // unique
+            unique: true, // check this
             required: true,
-            // trimmed
+            trim: true
         },
         email: {
             type: String,
             required: true,
-            // unique
+            unique: true, // check this
             // validation
         },
         thoughts: [
@@ -26,10 +26,18 @@ const userSchema = new Schema(
               type: Schema.Types.ObjectId,
               ref: 'user',
             },
-            // create virtual to get length
         ],
+        toJSON: {
+            virtuals: true,
+        },
+        id: false,
     }
 );
+    
+// create virtual to get length of friends list
+userSchema.virtual('friendCount').get(function () {
+    return this.friends.length;
+});
 
 const User = model('user', userSchema);
 

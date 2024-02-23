@@ -1,5 +1,7 @@
 const { Schema, Types } = require('mongoose');
 
+const { formatDate } = require('../utils/helpers');
+
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -9,7 +11,7 @@ const reactionSchema = new Schema(
         reactionBody: {
             type: String,
             required: true,
-            maxlength: 280 // DOUBLE CHECK THIS
+            maxlength: 280 
         },
         username: {
             type: String,
@@ -17,10 +19,17 @@ const reactionSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
+            default: Date.now,
             // use getter to format timestamp
-        }
+            get: formatDate
+        },
+        toJSON: {
+            getters: true
+        },
+        id: false,
     }
 );
+
+
 
 module.exports = reactionSchema;
