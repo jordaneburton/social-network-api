@@ -81,9 +81,9 @@ module.exports = {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
         
-            const user = await User.findOne(
+            const user = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $addToSet: { friends: friend._id } },
+                { $addToSet: { friends: req.params.friendId } },
                 { new: true }
             );
 
@@ -106,10 +106,14 @@ module.exports = {
             if (!user) {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
+            const removeFriend = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: req.params.friendId } },
+                { new: true }
+            );
+            // user.friends.pull({ _id: req.params.friendId });
 
-            user.friends.pull({ _id: req.params.friendId });
-
-            res.json(user);
+            res.json(removeFriend);
         } catch (err) {
             res.status(500).json(err);
         }

@@ -1,11 +1,43 @@
-const { Thought } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
     // Get all thoughts
-    async getThoughts(req, res) {},
+    async getThoughts(req, res) {
+        try {
+            const thoughts = await Thought.find();
+            res.json(thoughts);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 
     // Create new thought
-    async createThought(req, res) {},
+    async createThought(req, res) {
+        try {
+            const user = await User.findOne({ 
+                _id: req.body.userId, 
+                username: req.body.username 
+            });
+            if (!user) { 
+                return res.status(404).json({ message: "No user with that ID" }) 
+            }
+            
+            const thoughtData = await Thought.create({ 
+                thoughtText: req.body.thoughtText, 
+                username: req.body.username
+            });
+            
+            User.findOne(
+                { _id: req.body.userId, username: req.body.username },
+                { $addToSet: { thoughts: thoughtData._id } },
+                { new: true }
+            );
+
+            res.json(thoughtData);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
 
     // Get a thought
     async getSingleThought(req, res) {
