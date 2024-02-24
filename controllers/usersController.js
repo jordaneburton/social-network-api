@@ -44,9 +44,10 @@ module.exports = {
                 { _id: req.params.userId }, 
                 { $set: { 
                     username: req.body.username,
-                    email: req.body.username, 
+                    email: req.body.email, 
                 }},
-                { runValidators: true }
+                { runValidators: true },
+                { new: true }
             );
 
             res.json(user);
@@ -64,8 +65,8 @@ module.exports = {
                 return res.status(404).json({ message: 'No user with that ID'});
             }
 
-            const user = await User.deleteOne({ _id: req.params.userId });
-            res.json({ message: `${user} | Deleted user with ID:${req.params._id}`});
+            await User.deleteOne({ _id: req.params.userId });
+            res.json({ message: `Deleted user with ID:${deletedUser._id}`});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -111,7 +112,6 @@ module.exports = {
                 { $pull: { friends: req.params.friendId } },
                 { new: true }
             );
-            // user.friends.pull({ _id: req.params.friendId });
 
             res.json(removeFriend);
         } catch (err) {
