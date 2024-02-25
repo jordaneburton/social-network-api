@@ -27,13 +27,13 @@ module.exports = {
                 username: req.body.username
             });
             
-            User.findOne(
+            const addThought = await User.findOneAndUpdate(
                 { _id: req.body.userId },
-                { $addToSet: { thoughts: req.body.userId } },
+                { $addToSet: { thoughts: thoughtData._id } },
                 { new: true }
             );
 
-            res.json(thoughtData);
+            res.json({ thoughtData, addThought });
         } catch (err) {
             res.status(500).json(err);
         }
@@ -87,7 +87,13 @@ module.exports = {
                 return res.status(404).json({ message: 'No thought with that ID'});
             }
 
+            
             await Thought.deleteOne({ _id: req.params.thoughtId });
+            await User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $pull: { thoughts: req.params.thoughtId } },
+                { new: true }
+            );
             res.json({ message: `Deleted thought with ID:${deletedThought._id}`});
         } catch (err) {
             res.status(500).json(err);
